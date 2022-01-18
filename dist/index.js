@@ -8491,6 +8491,7 @@ const main = async () => {
       deletions: 0,
       changes: 0,
     };
+    const labels = [];
 
     diffData = changedFiles.reduce((acc, file) => {
       acc.additions += file.additions;
@@ -8503,33 +8504,20 @@ const main = async () => {
       const fileExtension = file.filename.split(".").pop();
       switch (fileExtension) {
         case "md":
-          await octokit.rest.issues.addLabels({
-            owner,
-            repo,
-            issue_number: pr_number,
-            labels: ["markdown"],
-          });
+          labels.push("markdown");
+          break;
+
         case "js":
-          await octokit.rest.issues.addLabels({
-            owner,
-            repo,
-            issue_number: pr_number,
-            labels: ["javascript"],
-          });
+          labels.push("javascript");
+          break;
+
         case "yml":
-          await octokit.rest.issues.addLabels({
-            owner,
-            repo,
-            issue_number: pr_number,
-            labels: ["yaml"],
-          });
         case "yaml":
-          await octokit.rest.issues.addLabels({
-            owner,
-            repo,
-            issue_number: pr_number,
-            labels: ["yaml"],
-          });
+          labels.push("yaml");
+          break;
+
+        default:
+          break;
       }
     }
 
@@ -8538,10 +8526,13 @@ const main = async () => {
       repo,
       issue_number: pr_number,
       body: `
-        Pull Request #${pr_number} has been updated with: \n
+        Pull Request #${pr_number} metadata: \n
         - ${diffData.changes} changes \n
         - ${diffData.additions} additions \n
-        - ${diffData.deletions} deletions \n
+        - ${diffData.deletions} deletions \n\n
+        # changed files type 
+        [${labels.join(", ")}]
+
       `,
     });
   } catch (error) {

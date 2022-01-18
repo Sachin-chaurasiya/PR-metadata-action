@@ -35,19 +35,13 @@ const main = async () => {
       switch (fileExtension) {
         case "md":
           labels.push("markdown");
-          break;
 
         case "js":
           labels.push("javascript");
-          break;
 
         case "yml":
         case "yaml":
           labels.push("yaml");
-          break;
-
-        default:
-          break;
       }
     }
 
@@ -59,7 +53,7 @@ const main = async () => {
         Pull Request #${pr_number} metadata: \n
         - ${diffData.changes} changes \n
         - ${diffData.additions} additions \n
-        - ${diffData.deletions} deletions \n\n
+        - ${diffData.deletions} deletions \n
         # changed files type 
         [${labels.join(", ")}]
 
